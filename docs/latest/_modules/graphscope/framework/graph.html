@@ -507,6 +507,7 @@ MathJax = {
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../../../reference/analytical_engine_index.html">Analytical Engine API Reference</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../reference/gae_java/index.html">Analytical Engine Java API Reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../reference/flex/index.html">Flex API Reference</a></li>
 </ul>
 
 </div>
@@ -930,7 +931,10 @@ MathJax = {
         <span class="bp">self</span><span class="o">.</span><span class="n">_base_graph</span> <span class="o">=</span> <span class="kc">None</span>
         <span class="c1"># add op to dag</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_resolve_op</span><span class="p">(</span><span class="n">incoming_data</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_session</span><span class="o">.</span><span class="n">dag</span><span class="o">.</span><span class="n">add_op</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_op</span><span class="p">)</span></div>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_session</span><span class="o">.</span><span class="n">dag</span><span class="o">.</span><span class="n">add_op</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_op</span><span class="p">)</span>
+
+        <span class="c1"># statically create the unload op</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_unload_op</span> <span class="o">=</span> <span class="n">dag_utils</span><span class="o">.</span><span class="n">unload_graph</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span></div>
 
     <span class="nd">@property</span>
     <span class="k">def</span> <span class="nf">v_labels</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
@@ -1354,8 +1358,7 @@ MathJax = {
 <span class="sd">        Returns:</span>
 <span class="sd">            :class:`graphscope.framework.graph.UnloadedGraph`: Evaluated in eager mode.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="n">op</span> <span class="o">=</span> <span class="n">dag_utils</span><span class="o">.</span><span class="n">unload_graph</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
-        <span class="k">return</span> <span class="n">UnloadedGraph</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_session</span><span class="p">,</span> <span class="n">op</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">UnloadedGraph</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_session</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_unload_op</span><span class="p">)</span>
 
 <div class="viewcode-block" id="GraphDAGNode.project"><a class="viewcode-back" href="../../../reference/graph.html#graphscope.framework.graph.GraphDAGNode.project">[docs]</a>    <span class="k">def</span> <span class="nf">project</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span>

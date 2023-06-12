@@ -507,6 +507,7 @@ MathJax = {
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../../../reference/analytical_engine_index.html">Analytical Engine API Reference</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../reference/gae_java/index.html">Analytical Engine Java API Reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../reference/flex/index.html">Flex API Reference</a></li>
 </ul>
 
 </div>
@@ -992,6 +993,10 @@ MathJax = {
         <span class="c1"># add op to dag</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_session</span><span class="o">.</span><span class="n">dag</span><span class="o">.</span><span class="n">add_op</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_op</span><span class="p">)</span>
 
+        <span class="c1"># statically create the unload op to prevent a possible segmentation fault</span>
+        <span class="c1"># inside the protobuf library.</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_unload_op</span> <span class="o">=</span> <span class="n">unload_app</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+
     <span class="k">def</span> <span class="fm">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="n">s</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;graphscope.App &lt;type: </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">_app_assets</span><span class="o">.</span><span class="n">type</span><span class="si">}</span><span class="s2">, algorithm: </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">_app_assets</span><span class="o">.</span><span class="n">algo</span><span class="si">}</span><span class="s2"> &quot;</span>
         <span class="n">s</span> <span class="o">+=</span> <span class="sa">f</span><span class="s2">&quot;bounded_graph: </span><span class="si">{</span><span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_graph</span><span class="p">)</span><span class="si">}</span><span class="s2">&gt;&quot;</span>
@@ -1060,8 +1065,7 @@ MathJax = {
 <span class="sd">        Returns:</span>
 <span class="sd">            :class:`graphscope.framework.app.UnloadedApp`: Evaluated in eager mode.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="n">op</span> <span class="o">=</span> <span class="n">unload_app</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
-        <span class="k">return</span> <span class="n">UnloadedApp</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_session</span><span class="p">,</span> <span class="n">op</span><span class="p">)</span></div>
+        <span class="k">return</span> <span class="n">UnloadedApp</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_session</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_unload_op</span><span class="p">)</span></div>
 
 
 <div class="viewcode-block" id="App"><a class="viewcode-back" href="../../../reference/app.html#graphscope.framework.app.App">[docs]</a><span class="k">class</span> <span class="nc">App</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>

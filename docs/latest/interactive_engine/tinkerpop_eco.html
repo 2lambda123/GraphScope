@@ -518,6 +518,7 @@ MathJax = {
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../reference/analytical_engine_index.html">Analytical Engine API Reference</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../reference/gae_java/index.html">Analytical Engine Java API Reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../reference/flex/index.html">Flex API Reference</a></li>
 </ul>
 
 </div>
@@ -691,11 +692,52 @@ How to do that?</p>
 <a class="reference internal" href="getting_started.html"><span class="std std-doc">GraphScope’s python SDK</span></a>, which is a wrapper that encompasses Tinkerpop’s
 Gremlin-Python and will automatically acquire the endpoint.</p>
 </div>
+<p>In large-scale data processing scenarios, streaming the returned data is often necessary to avoid Out of Memory (OOM) issues caused by handling a large volume of data, which provides benefits such as memory efficiency, continuous processing, incremental analysis, reduced latency, scalability, and resource optimization. It enables you to handle and analyze vast amounts of data effectively while mitigating the risk of memory-related issues. Here is an example to guide you how to collect results in a streaming way by python sdk.</p>
+<div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">queue</span> <span class="kn">import</span> <span class="n">Queue</span>
+<span class="kn">from</span> <span class="nn">gremlin_python.driver.client</span> <span class="kn">import</span> <span class="n">Client</span>
+
+<span class="n">graph_url</span> <span class="o">=</span> <span class="c1"># the GIE Frontend service endpoint you&#39;ve obtained</span>
+<span class="n">client</span> <span class="o">=</span> <span class="n">Client</span><span class="p">(</span><span class="n">graph_url</span><span class="p">,</span> <span class="s2">&quot;g&quot;</span><span class="p">)</span>
+
+<span class="n">ret</span> <span class="o">=</span> <span class="p">[]</span>
+<span class="n">q</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">submit</span><span class="p">(</span><span class="s1">&#39;g.V()&#39;</span><span class="p">)</span>
+<span class="k">while</span> <span class="kc">True</span><span class="p">:</span>
+<span class="k">try</span><span class="p">:</span>
+   <span class="n">ret</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="n">q</span><span class="o">.</span><span class="n">next</span><span class="p">())</span>
+<span class="k">except</span> <span class="ne">StopIteration</span><span class="p">:</span>
+   <span class="k">break</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="n">ret</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Furthermore, here are some parameters that can be used to configure the streaming size on the server-side.</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1"># interactive_engine/compiler/src/main/resources/conf/gremlin-server.yaml</span>
+...
+<span class="c1"># total num of streaming batch size returned by compiler service</span>
+resultIterationBatchSize:<span class="w"> </span><span class="m">64</span>
+...
+</pre></div>
+</div>
 </div>
 <div class="section" id="connecting-gremlin-within-java">
 <h2>Connecting Gremlin within Java<a class="headerlink" href="#connecting-gremlin-within-java" title="Permalink to this heading">#</a></h2>
 <p>See <a class="reference external" href="https://tinkerpop.apache.org/docs/current/reference/#gremlin-java">Gremlin-Java</a> for connecting Gremlin
 within the Java language.</p>
+<p>Here is an example to guide you how to collect results in a streaming way by java sdk.</p>
+<div class="highlight-java notranslate"><div class="highlight"><pre><span></span><span class="n">Cluster</span><span class="w"> </span><span class="n">cluster</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">Cluster</span><span class="p">.</span><span class="na">build</span><span class="p">()</span>
+<span class="w">         </span><span class="p">.</span><span class="na">addContactPoint</span><span class="p">(</span><span class="s">&quot;localhost&quot;</span><span class="p">)</span><span class="w"> </span><span class="c1">// use your host ip</span>
+<span class="w">         </span><span class="p">.</span><span class="na">port</span><span class="p">(</span><span class="mi">8182</span><span class="p">)</span><span class="w"> </span><span class="c1">// use your port</span>
+<span class="w">         </span><span class="p">.</span><span class="na">create</span><span class="p">();</span>
+<span class="n">Client</span><span class="w"> </span><span class="n">client</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">cluster</span><span class="p">.</span><span class="na">connect</span><span class="p">();</span>
+<span class="n">ResultSet</span><span class="w"> </span><span class="n">resultSet</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">client</span><span class="p">.</span><span class="na">submit</span><span class="p">(</span><span class="s">&quot;g.V()&quot;</span><span class="p">);</span><span class="w"> </span><span class="c1">// use your query</span>
+<span class="n">Iterator</span><span class="o">&lt;</span><span class="n">Result</span><span class="o">&gt;</span><span class="w"> </span><span class="n">results</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">resultSet</span><span class="p">.</span><span class="na">iterator</span><span class="p">();</span>
+<span class="k">while</span><span class="p">(</span><span class="n">results</span><span class="p">.</span><span class="na">hasNext</span><span class="p">())</span><span class="w"> </span><span class="p">{</span>
+<span class="w">   </span><span class="n">display</span><span class="p">(</span><span class="n">results</span><span class="p">.</span><span class="na">next</span><span class="p">());</span><span class="w"> </span><span class="c1">// display each result in your way</span>
+<span class="p">}</span>
+<span class="n">client</span><span class="p">.</span><span class="na">close</span><span class="p">();</span>
+<span class="n">cluster</span><span class="p">.</span><span class="na">close</span><span class="p">();</span>
+</pre></div>
+</div>
 </div>
 <div class="section" id="gremlin-console">
 <h2>Gremlin Console<a class="headerlink" href="#gremlin-console" title="Permalink to this heading">#</a></h2>
