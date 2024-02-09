@@ -41,6 +41,7 @@ import com.alibaba.graphscope.utils.LongPointerAccessor;
 import com.alibaba.graphscope.utils.MessageStore;
 import com.alibaba.graphscope.utils.ThreadSafeBitSet;
 import com.alibaba.graphscope.utils.array.PrimitiveArray;
+import io.github.pixee.security.ObjectInputFilters;
 
 import org.apache.spark.graphx.EdgeDirection;
 import org.apache.spark.graphx.EdgeTriplet;
@@ -610,6 +611,7 @@ public class GraphXParallelPIE<VD, ED, MSG_T> {
             }
         } else {
             ObjectInputStream objectInputStream = new ObjectInputStream(ffiInput);
+            ObjectInputFilters.enableObjectFilterIfUnprotected(objectInputStream);
             for (int i = 0; i < len; ++i) {
                 T obj = (T) objectInputStream.readObject();
                 newArray.set(i, obj);
