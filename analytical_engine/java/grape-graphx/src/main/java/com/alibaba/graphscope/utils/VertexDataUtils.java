@@ -27,6 +27,7 @@ import com.alibaba.graphscope.stdcxx.FFIIntVector;
 import com.alibaba.graphscope.stdcxx.FFIIntVectorFactory;
 import com.alibaba.graphscope.stdcxx.FakeFFIByteVector;
 import com.alibaba.graphscope.utils.array.PrimitiveArray;
+import io.github.pixee.security.ObjectInputFilters;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -120,6 +121,7 @@ public class VertexDataUtils {
         } else {
             T[] newArray = (T[]) new Object[(int) len];
             ObjectInputStream objectInputStream = new ObjectInputStream(ffiInput);
+            ObjectInputFilters.enableObjectFilterIfUnprotected(objectInputStream);
             for (int i = 0; i < len; ++i) {
                 T obj = (T) objectInputStream.readObject();
                 newArray[i] = obj;
