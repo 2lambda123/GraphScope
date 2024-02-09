@@ -8,6 +8,7 @@ import com.aliyun.oss.model.OSSObject;
 import com.aliyun.oss.model.UploadFileRequest;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import io.github.pixee.security.BoundedLineReader;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -161,7 +162,7 @@ public class OSSFS extends AbstractFileSystem {
             BufferedReader reader =
                     new BufferedReader(new InputStreamReader(ossObject.getObjectContent()));
             while (true) {
-                String line = reader.readLine();
+                String line = BoundedLineReader.readLine(reader, 5_000_000);
                 if (line == null) break;
                 data.append(line);
             }

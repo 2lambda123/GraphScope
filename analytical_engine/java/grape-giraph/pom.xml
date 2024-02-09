@@ -82,6 +82,10 @@
       <groupId>org.scijava</groupId>
       <artifactId>native-lib-loader</artifactId>
     </dependency>
+    <dependency>
+      <groupId>io.github.pixee</groupId>
+      <artifactId>java-security-toolkit</artifactId>
+    </dependency>
   </dependencies>
   <build>
     <plugins>

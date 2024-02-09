@@ -15,6 +15,7 @@
  */
 package com.alibaba.graphscope.loader;
 
+import io.github.pixee.security.BoundedLineReader;
 import org.apache.hadoop.io.DoubleWritable;
 import org.apache.hadoop.io.FloatWritable;
 import org.apache.hadoop.io.IntWritable;
@@ -55,7 +56,7 @@ public class LoaderUtils {
             process = builder.start();
             try (BufferedReader reader =
                     new BufferedReader(new InputStreamReader(process.getInputStream()))) {
-                String res = reader.readLine().trim().split("\\s+")[0];
+                String res = BoundedLineReader.readLine(reader, 5_000_000).trim().split("\\s+")[0];
                 return Long.parseLong(res);
             }
         } catch (IOException e) {

@@ -16,6 +16,7 @@
 
 package com.alibaba.graphscope.utils;
 
+import io.github.pixee.security.BoundedLineReader;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -148,7 +149,7 @@ public class PythonInterpreter {
             int cnt = 0;
             while (true) {
                 try {
-                    if ((line = reader.readLine()) == null) {
+                    if ((line = BoundedLineReader.readLine(reader, 5_000_000)) == null) {
                         break;
                     } else {
                         queue.add(line);
@@ -177,7 +178,7 @@ public class PythonInterpreter {
             int cnt = 0;
             while (true) {
                 try {
-                    if ((line = reader.readLine()) == null) {
+                    if ((line = BoundedLineReader.readLine(reader, 5_000_000)) == null) {
                         break;
                     } else {
                         logger.info("Error Stream: {}", line);

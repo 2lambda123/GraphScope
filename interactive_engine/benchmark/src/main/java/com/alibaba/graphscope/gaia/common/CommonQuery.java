@@ -15,6 +15,7 @@
  */
 package com.alibaba.graphscope.gaia.common;
 
+import io.github.pixee.security.BoundedLineReader;
 import org.apache.commons.lang3.tuple.Pair;
 import org.apache.tinkerpop.gremlin.driver.Client;
 import org.apache.tinkerpop.gremlin.driver.Result;
@@ -108,7 +109,7 @@ public class CommonQuery {
     private static String getGremlinQueryPattern(String gremlinQueryPath) throws Exception {
         FileInputStream fileInputStream = new FileInputStream(gremlinQueryPath);
         BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(fileInputStream));
-        return bufferedReader.readLine();
+        return BoundedLineReader.readLine(bufferedReader, 5_000_000);
     }
 
     private static ArrayList<HashMap<String, String>> getParameters(String parameterFilePath)
@@ -116,10 +117,10 @@ public class CommonQuery {
         ArrayList<HashMap<String, String>> parameters = new ArrayList<>();
         FileInputStream fileInputStream = new FileInputStream(parameterFilePath);
         BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(fileInputStream));
-        String headerStr = bufferedReader.readLine();
+        String headerStr = BoundedLineReader.readLine(bufferedReader, 5_000_000);
         String[] headerSet = headerStr.split("\\|");
         String idStr;
-        while ((idStr = bufferedReader.readLine()) != null) {
+        while ((idStr = BoundedLineReader.readLine(bufferedReader, 5_000_000)) != null) {
             String[] idSet = idStr.split("\\|");
             if (headerSet.length != idSet.length) {
                 throw new RuntimeException("there is parameter is empty");
