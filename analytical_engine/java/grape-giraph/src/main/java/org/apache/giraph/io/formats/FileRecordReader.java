@@ -15,6 +15,7 @@
  */
 package org.apache.giraph.io.formats;
 
+import io.github.pixee.security.BoundedLineReader;
 import org.apache.hadoop.io.LongWritable;
 import org.apache.hadoop.io.Text;
 import org.apache.hadoop.mapreduce.InputSplit;
@@ -49,7 +50,7 @@ public class FileRecordReader extends RecordReader<LongWritable, Text> {
     @Override
     public boolean nextKeyValue() throws IOException, InterruptedException {
         if (Objects.isNull(cachedLine)) {
-            cachedLine = reader.readLine();
+            cachedLine = BoundedLineReader.readLine(reader, 5_000_000);
         }
         //        logger.debug("check next line: {}", cachedLine);
         return (Objects.nonNull(cachedLine) && !cachedLine.isEmpty());

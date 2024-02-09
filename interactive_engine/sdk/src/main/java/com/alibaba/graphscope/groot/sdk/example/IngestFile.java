@@ -14,6 +14,7 @@
 package com.alibaba.graphscope.groot.sdk.example;
 
 import com.alibaba.graphscope.groot.sdk.GrootClient;
+import io.github.pixee.security.BoundedLineReader;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -55,7 +56,7 @@ public class IngestFile {
         long snapshotId = 0;
         try (BufferedReader br = new BufferedReader(new FileReader(file))) {
             String line;
-            while ((line = br.readLine()) != null) {
+            while ((line = BoundedLineReader.readLine(br, 5_000_000)) != null) {
                 if (propertyNames.size() == 0) { // First line
                     for (String item : line.split("\\|")) {
                         propertyNames.add(item);

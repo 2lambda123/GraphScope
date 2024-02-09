@@ -17,6 +17,7 @@
 package com.alibaba.graphscope.utils;
 
 import com.alibaba.graphscope.graphx.utils.GrapeUtils;
+import io.github.pixee.security.BoundedLineReader;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -190,7 +191,7 @@ public class MPIUtils {
                     new BufferedReader(new InputStreamReader(process.getErrorStream()));
             String str;
             int cnt = 0;
-            while ((str = stdInput.readLine()) != null) {
+            while ((str = BoundedLineReader.readLine(stdInput, 5_000_000)) != null) {
                 System.out.println(str);
                 if (str.contains(FINALIZE_PATTERN)) {
                     cnt += 1;
@@ -290,7 +291,7 @@ public class MPIUtils {
             BufferedReader stdInput =
                     new BufferedReader(new InputStreamReader(process.getErrorStream()));
             String str;
-            while ((str = stdInput.readLine()) != null) {
+            while ((str = BoundedLineReader.readLine(stdInput, 5_000_000)) != null) {
                 System.out.println(str);
                 if (str.contains(Load_FRAGMENT_PATTERN)) {
                     if (ind >= numWorkers) {

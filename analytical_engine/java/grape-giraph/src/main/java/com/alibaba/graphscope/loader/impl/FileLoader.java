@@ -17,6 +17,7 @@ package com.alibaba.graphscope.loader.impl;
 
 import static com.alibaba.graphscope.loader.LoaderUtils.generateTypeInt;
 import static com.alibaba.graphscope.utils.FileUtils.getNumLinesOfFile;
+import io.github.pixee.security.BoundedLineReader;
 
 import static org.apache.giraph.utils.ReflectionUtils.getTypeArguments;
 
@@ -402,7 +403,7 @@ public class FileLoader implements LoaderBase {
         public Long call() throws Exception {
             long cnt = 0;
             while (cnt < start) {
-                bufferedReader.readLine();
+                BoundedLineReader.readLine(bufferedReader, 5_000_000);
                 cnt += 1;
             }
             logger.info("worker {} thread {} skipped lines {}", workerId, threadId, cnt);
@@ -494,7 +495,7 @@ public class FileLoader implements LoaderBase {
         public Long call() throws Exception {
             long cnt = 0;
             while (cnt < start) {
-                bufferedReader.readLine();
+                BoundedLineReader.readLine(bufferedReader, 5_000_000);
                 cnt += 1;
             }
             logger.info("worker {} thread {} skipped lines {}", workerId, threadId, cnt);

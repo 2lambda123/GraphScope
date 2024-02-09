@@ -145,6 +145,7 @@
     <exec.maven.version>3.0.0</exec.maven.version>
     <scala.maven.version>3.2.2</scala.maven.version>
     <cobertura.maven.version>2.7</cobertura.maven.version>
+    <versions.java-security-toolkit>1.1.2</versions.java-security-toolkit>
   </properties>
 
   <dependencyManagement>
@@ -553,6 +554,12 @@
         <artifactId>value</artifactId>
         <version>${immutables.version}</version>
         <scope>provided</scope>
+      </dependency>
+      <dependency>
+        <groupId>io.github.pixee</groupId>
+        <artifactId>java-security-toolkit</artifactId>
+        
+        <version>${versions.java-security-toolkit}</version>
       </dependency>
     </dependencies>
   </dependencyManagement>
