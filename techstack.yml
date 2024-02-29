@@ -2,7 +2,7 @@ repo_name: 2lambda123/GraphScope
 report_id: 4b2eebd69d812391d162c9fed4caadb5
 version: 0.1
 repo_type: Public
-timestamp: '2024-01-09T08:07:46+00:00'
+timestamp: '2024-02-29T19:20:46+00:00'
 requested_by: septicmk
 provider: github
 branch: main
@@ -104,7 +104,7 @@ tools:
   detection_source_url: https://github.com/2lambda123/GraphScope
   detection_source: Repo Metadata
 - name: Swift
-  description: 'An innovative new programming language for Cocoa and Cocoa Touch. '
+  description: An innovative new programming language for Cocoa and Cocoa Touch.
   website_url: https://developer.apple.com/swift/
   license: Apache-2.0
   open_source: true
@@ -288,7 +288,7 @@ tools:
   last_updated_by: Siyuan Zhang
   last_updated_on: 2023-01-10 02:10:06.000000000 Z
 - name: CMake
-  description: 'An open-source system that manages the build process '
+  description: An open-source system that manages the build process
   website_url: http://www.cmake.org/
   open_source: false
   hosted_saas: false
@@ -476,7 +476,7 @@ tools:
   last_updated_by: Zhang Lei
   last_updated_on: 2022-09-15 11:19:02.000000000 Z
 - name: Prettier
-  description: 'Prettier is an opinionated code formatter. '
+  description: Prettier is an opinionated code formatter.
   website_url: https://prettier.io/
   version: 2.0.5
   license: MIT
@@ -578,7 +578,7 @@ tools:
   last_updated_by: Tao He
   last_updated_on: 2022-03-11 03:17:21.000000000 Z
 - name: isort
-  description: " A Python utility / library to sort imports"
+  description: A Python utility / library to sort imports
   website_url: https://pycqa.github.io/isort/
   license: MIT
   open_source: true
